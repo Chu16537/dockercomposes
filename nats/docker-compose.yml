@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  nats: 
+    image: nats
+    container_name: nats
+    restart: always
+    ports:
+        - 4222:4222
+        - 8222:8222
+    networks:
+      - web_service
+networks:
+  web_service:
+    external: true

@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  # 這是 grafana 顯示圖片的套件，我們使用 3.4.2 版本，記得要設定環境變數，照片顯示的時間才會正確，並開啟 8081 Port 讓 grafana 訪問。
+  renderer:
+    image: grafana/grafana-image-renderer:3.4.2
+    environment:
+      BROWSER_TZ: Asia/Taipei
+    ports:
+      - '8081:8081'
+    networks:
+      - web_service
+
+  grafana:
+    image: grafana/grafana:8.2.5
+    container_name: grafana
+    volumes:
+      - ${VOLUME_PATH}/Grafana/grafana_data:/var/lib/grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: pass
+      GF_RENDERING_SERVER_URL: http://renderer:8081/render
+      GF_RENDERING_CALLBACK_URL: http://grafana:3000/
+      GF_LOG_FILTERS: rendering:debug
+    depends_on:
+      - renderer
+    ports:
+      - '3000:3000'
+    networks:
+      - web_service
+
+networks:
+  web_service:
+    external: true

@@ -1,0 +1,19 @@
+version: "3"
+services:
+
+  fluentd:
+    build: 
+      context: .
+    container_name: fluentd
+    volumes:
+      - ./conf/:/fluentd/etc/
+    ports:
+      # - "9880:9880"
+      - "24224:24224"
+      - "24224:24224/udp"
+    networks:
+      - web_service
+
+networks:
+  web_service:
+    external: true

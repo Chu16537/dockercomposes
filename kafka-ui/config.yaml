@@ -1,0 +1,8 @@
+kafka:
+  clusters:
+    -
+      name: dev
+      bootstrapServers: b-1.kafkalekimadev.u9i2rn.c5.kafka.ap-southeast-1.amazonaws.com:9092
+    -
+      name: local
+      bootstrapServers: kafka:9092
