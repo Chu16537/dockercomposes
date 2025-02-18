@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  mongo1:
+    image: mongo
+    container_name: mongo1
+    ports:
+      - "27017:27017"
+    command: ["mongod", "--replSet", "rs0"]
+
+  mongo2:
+    image: mongo
+    container_name: mongo2
+    depends_on:
+      - mongo1
+    command: ["mongod", "--replSet", "rs0"]
+
+  mongo3:
+    image: mongo
+    container_name: mongo3
+    depends_on:
+      - mongo2
+    command: ["mongod", "--replSet", "rs0"]
+
+  init-replica-set:
+    image: mongo
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    command: ["bash", "-c", "sleep 5 && mongosh --host mongo1:27017 --eval 'rs.initiate(); rs.add(\"mongo2:27017\"); rs.add(\"mongo3:27017\")'"]
+
